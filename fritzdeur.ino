@@ -10,6 +10,7 @@
 
 #include <Arduino.h>
 #include <ArduinoOTA.h>
+#include "OTA_PASSWORD.h"
 
 #include <WiFi.h>
 #include <PubSubClient.h>
@@ -93,7 +94,7 @@ void setup() {
   
   // setup OTA
   ArduinoOTA.setHostname("esp-fritzdeur");
-  ArduinoOTA.setPassword("fritzdeur");
+  ArduinoOTA.setPassword(OTA_PASSWORD);
   ArduinoOTA.begin();
 }
 
