@@ -1,7 +1,7 @@
 /*
  * ESP32 reads contact GPIO12 for high/low state
- * high = fridgedoor open
- * low = fridgedoor closed
+ * high = fridgedoor closed
+ * low = fridgedoor open
  * State is posted to MQTT revspace/fritzdeur with message 'open' or 'closed'
  * 
  * Adapted from low quality example code by Sebastius
