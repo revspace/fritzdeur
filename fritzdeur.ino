@@ -24,9 +24,7 @@ const int Schakelcontact = 12;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-long lastMsg = 0;
-char msg[50];
-int value = 0;
+
 int state = -1;
 
 void setup_wifi() {
@@ -115,4 +113,3 @@ void loop() {
   }
   ArduinoOTA.handle();
 }
-
