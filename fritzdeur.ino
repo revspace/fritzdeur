@@ -8,6 +8,9 @@
  * 2019-08-30
  */
 
+#include <Arduino.h>
+#include <ArduinoOTA.h>
+
 #include <WiFi.h>
 #include <PubSubClient.h>
 
@@ -89,6 +92,11 @@ void setup() {
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
+  
+  // setup OTA
+  ArduinoOTA.setHostname("esp-fritzdeur");
+  ArduinoOTA.setPassword("fritzdeur");
+  ArduinoOTA.begin();
 }
 
 void loop() {
@@ -105,4 +113,6 @@ void loop() {
     client.publish("revspace/fritzdeur", state ? "closed" : "open");
     delay(100);
   }
+  ArduinoOTA.handle();
 }
+
