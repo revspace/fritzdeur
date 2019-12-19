@@ -14,6 +14,7 @@
 
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include <esp_task_wdt.h>
 
 // Update these with values suitable for your network.
 
@@ -85,9 +86,21 @@ void reconnect() {
   }
 }
 
+int flash = 2;
+
 void setup() {
   pinMode(Schakelcontact, INPUT);
   Serial.begin(115200);
+
+  esp_task_wdt_init(30 /* seconds */, true);
+  esp_err_t err = esp_task_wdt_add(NULL);
+  if (err == ESP_OK) {
+    Serial.println("Watchdog \\o/");
+  } else {
+    Serial.println("Watchdog FAIL :(");
+    flash = 3;
+  }
+
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
@@ -103,9 +116,17 @@ void loop() {
     reconnect();
   }
   client.loop();
-  
+
+  if (flash) {
+    flash--;
+    client.publish("revspace/fritzdeur", "open");
+    delay(500);
+    client.publish("revspace/fritzdeur", "closed");
+    delay(500);
+  }
+
   bool newstate=digitalRead(Schakelcontact);
-  
+
   if (newstate!=state) {
     Serial.print("Wisselen");
     state=newstate;
@@ -113,4 +134,6 @@ void loop() {
     delay(100);
   }
   ArduinoOTA.handle();
+
+  esp_task_wdt_reset();
 }
